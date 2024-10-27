@@ -1,1 +1,0 @@
-console.log("connecting the github repo and making the folder for the backend of the project")
