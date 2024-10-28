@@ -1,0 +1,1 @@
+import  datauri from 'datauri';
