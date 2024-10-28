@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
+import userRoute from "./routes/user.route.js";
 
 dotenv.config({});
 
@@ -29,6 +30,13 @@ const corsOptions = {
     credentials : true
 }
 app.use(cors(corsOptions));
+
+
+//yaha par api  call karna hai
+
+app.use("/api/v1/user",userRoute);
+"http://localhost:8000/api/v1/user"
+
 
 
 app.listen(port,() =>{

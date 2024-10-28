@@ -3,7 +3,7 @@ import { editProfile, followOrUnFollow, getProfile, getSuggestedUsers, login, lo
 import isAuthenticated from '../middlewares/isAuthenticated.js';
 import upload from '../middlewares/multer.js';
 
-const router = express.router();
+const router = express.Router();
 
 router.route('/register').post(register);
 router.route('/login').post(login);
