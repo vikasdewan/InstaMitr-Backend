@@ -240,7 +240,7 @@ export const deletePost = async (req, res) => {
 
         if (post.author.toString() !== authorId) {
             return res.status(403).json({
-                message: "not access to delete the post / unauthorised";
+                message: "not access to delete the post / unauthorised",
                 success: false
             })
         }
