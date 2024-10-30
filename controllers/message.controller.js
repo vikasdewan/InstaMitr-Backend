@@ -14,53 +14,49 @@ export const sendMessage = async (req, res) => {
 
     //establish conversation if not started yet
 
-    if(!conversation){
-        conversation = await Conversation.create({
-            participants : [senderId,receiverId],
-        })
+    if (!conversation) {
+      conversation = await Conversation.create({
+        participants: [senderId, receiverId],
+      });
     }
 
     const newMessage = await Message.create({
-        senderId,
-        receiverId,
-        message
-    })
+      senderId,
+      receiverId,
+      message,
+    });
 
-    if(newMessage) conversation.messages.push(newMessage._id);
-    await Promise.all([conversation.save(),newMessage.save()])//to handle more than one collection multiple time.
-
+    if (newMessage) conversation.messages.push(newMessage._id);
+    await Promise.all([conversation.save(), newMessage.save()]); //to handle more than one collection multiple time.
 
     //implement socket io for real time data transfer
 
-
     return res.status(201).json({
-        success : true,
-        newMessage
-    })
+      success: true,
+      newMessage,
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
+export const getMessage = async (req, res) => {
+  try {
+    const senderId = req.id;
+    const receiverId = req.params.id;
+    const conversation = await Conversation.find({
+      participants: { $all: [senderId, receiverId] },
+    });
 
-export const getMessage = async(req,res)=>{
-    try {
+    if (!conversation)
+      return res.status(200).json({ messages: [], success: true });
 
-        const senderId = req.id;
-        const receiverId = req.params.id;
-        const conversation = await Conversation.find({
-            participants : {$all : [senderId,receiverId]}
-        })
+    return res
+      .status(200)
+      .json({ messages: conversation?.messages, success: true });
 
-        if(!conversation) return res.status(200).json({messages : [] ,success : true})
-
-        return res.status(200).json({messages : conversation?.messages  , success : true})
-
-        //const messages = await Message.find({conversationId:conversation._id}).sort({createdAt:-1})
-
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-
+    //const messages = await Message.find({conversationId:conversation._id}).sort({createdAt:-1})
+  } catch (error) {
+    console.log(error);
+  }
+};
